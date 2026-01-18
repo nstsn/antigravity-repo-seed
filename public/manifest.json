@@ -1,0 +1,49 @@
+{
+    "manifest_version": 3,
+    "name": "AI Thread Renamer",
+    "version": "0.1.0",
+    "description": "Rename ChatGPT/Gemini threads from Side Panel",
+    "permissions": [
+        "sidePanel",
+        "storage",
+        "tabs",
+        "activeTab",
+        "scripting",
+        "commands"
+    ],
+    "host_permissions": [
+        "https://chatgpt.com/*",
+        "https://gemini.google.com/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": [
+                "https://chatgpt.com/*",
+                "https://gemini.google.com/*"
+            ],
+            "js": [
+                "content.js"
+            ],
+            "run_at": "document_end"
+        }
+    ],
+    "background": {
+        "service_worker": "background.js",
+        "type": "module"
+    },
+    "action": {
+        "default_title": "Rename Thread"
+    },
+    "side_panel": {
+        "default_path": "src/panel/index.html"
+    },
+    "commands": {
+        "_execute_action": {
+            "suggested_key": {
+                "default": "Ctrl+Shift+E",
+                "mac": "Command+Shift+E"
+            },
+            "description": "Open Side Panel"
+        }
+    }
+}

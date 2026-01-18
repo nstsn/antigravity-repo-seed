@@ -1,0 +1,1 @@
+console.log("Background service worker loaded.");chrome.sidePanel.setPanelBehavior({openPanelOnActionClick:!0}).catch(e=>console.error(e));chrome.commands.onCommand.addListener(e=>{e==="_execute_action"&&chrome.runtime.sendMessage({type:"FOCUS_INPUT"}).catch(()=>{})});
