@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+*.log
+*.txt
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# OS
+Thumbs.db
+desktop.ini
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Agent artifacts (開発補助ツール、個人用)
+.agent/
+
+# Gemini AI assistant files (個人用設定)
+GEMINI.md
+
+# Testing
+coverage/
+
+# Temporary files
+*.tmp
+temp/
+tmp/
