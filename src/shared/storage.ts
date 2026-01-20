@@ -19,7 +19,12 @@ export const storage = {
     // Tags
     async getTags(): Promise<TagConfig> {
         const res = await chrome.storage.local.get(KEY_TAGS);
-        return (res[KEY_TAGS] as TagConfig) || { tags: [] };
+        const config = res[KEY_TAGS] as TagConfig;
+        return {
+            tags: config?.tags || [],
+            pinned: config?.pinned || [],
+            recent: config?.recent || []
+        };
     },
 
     async saveTags(config: TagConfig): Promise<void> {
@@ -32,6 +37,33 @@ export const storage = {
             config.tags.push(newTag);
             await this.saveTags(config);
         }
+    },
+
+    async toggleTagPin(tag: string): Promise<void> {
+        const config = await this.getTags();
+        if (!config.pinned) config.pinned = [];
+        const index = config.pinned.indexOf(tag);
+        if (index >= 0) {
+            config.pinned.splice(index, 1);
+        } else {
+            config.pinned.push(tag);
+        }
+        await this.saveTags(config);
+    },
+
+    async updateRecentTags(tags: string[]): Promise<void> {
+        if (tags.length === 0) return;
+        const config = await this.getTags();
+        let recent = config.recent || [];
+        
+        // Remove existing occurrences to move them to front
+        recent = recent.filter(t => !tags.includes(t));
+        // Add new tags to front
+        recent = [...tags, ...recent];
+        // Limit to 10
+        config.recent = recent.slice(0, 10);
+        
+        await this.saveTags(config);
     },
 
     // Threads

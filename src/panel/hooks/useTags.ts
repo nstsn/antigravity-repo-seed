@@ -21,8 +21,20 @@ export function useTags() {
         await loadTags(); // Reload after add
     };
 
+    const togglePin = async (tag: string) => {
+        await storage.toggleTagPin(tag);
+        await loadTags();
+    };
+
+    const updateRecent = async (tags: string[]) => {
+        await storage.updateRecentTags(tags);
+        await loadTags();
+    };
+
     return {
         config,
-        addTag
+        addTag,
+        togglePin,
+        updateRecent
     };
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { TagList } from './TagList';
 import { formatTitle, parseTitle, generateDatePrefix } from '../../shared/title_utils';
 import { RenameResult } from '../../shared/types';
+import { useTags } from '../hooks/useTags';
 
 interface Props {
     currentTitle: string;
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const RenameCard: React.FC<Props> = ({ currentTitle, onRename, onUndo, onReset, status, lastResult }) => {
+    const { updateRecent } = useTags();
     const [baseInput, setBaseInput] = useState('');
     const [tags, setTags] = useState<string[]>([]);
     const [datePrefix, setDatePrefix] = useState('');
@@ -50,6 +52,13 @@ export const RenameCard: React.FC<Props> = ({ currentTitle, onRename, onUndo, on
             setDatePrefix(generateDatePrefix());
         }
     }, [currentTitle]);
+
+    // Track success to update recent tags
+    useEffect(() => {
+        if (status === 'success' && tags.length > 0) {
+            updateRecent(tags);
+        }
+    }, [status]);
 
     const toggleTag = (tag: string) => {
         if (tags.includes(tag)) {
